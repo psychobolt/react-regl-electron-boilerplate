@@ -9,6 +9,7 @@ cache:
 addons:
   apt:
     packages:
+    - libxi-dev
     - mesa-utils
     - xvfb
     - libgl1-mesa-dri
