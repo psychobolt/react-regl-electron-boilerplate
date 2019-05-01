@@ -1,83 +1,48 @@
 // @flow
-import React, { forwardRef } from 'react';
-import {
-  SceneModule,
-  DefineModule,
-  PerspectiveCamera,
-  RenderingModule,
-  OrbitControlsModule,
-  ResizeModule,
-} from 'whs/build/whs';
-import { App } from 'react-whs';
-import { defaultMemoize } from 'reselect';
-import * as THREE from 'three';
+import * as React from 'react';
+import { ReglContainer, Frame } from '@psychobolt/react-regl';
+import Camera from '@psychobolt/react-regl-orbit-camera';
 
-type Props = {
-  container: HTMLDivElement,
-  width?: number,
-  height?: number,
-  className: string,
-  children: any
+import withResizableContainer from 'Framework/ReactResizableContainer';
+
+const contextProps = {
+  extensions: ['webgl_draw_buffers', 'oes_texture_float'],
 };
 
-type ParentProps = {
-  className: string,
-  children: any
-}
+const center = [0.0, 0.5, 0.0];
 
-const Parent = defaultMemoize(className => forwardRef((
-  { children: child, className: defaultClass, ...rest }: ParentProps, ref,
-) => (
-  <div className={`${defaultClass} ${className}`} ref={ref} {...rest}>
-    {child}
-  </div>
-)));
+const theta = Math.PI / 2;
 
-export default class Scene extends React.Component<Props> {
-  static defaultProps = {
-    width: 680,
-    height: 420,
-  }
+const backgroundColor = [0.0, 0.0, 0.0, 1.0];
 
-  constructor(props: Props) {
-    super(props);
-    const { width, height } = props;
-    this.modules = [
-      new SceneModule(),
-      new DefineModule('camera', new PerspectiveCamera({
-        aspect: width / height,
-        position: new THREE.Vector3(0, 10, 50),
-      })),
-      new RenderingModule({
-        bgColor: 0x162129,
-        renderer: {
-          antialias: true,
-          shadowmap: {
-            type: THREE.PCFSoftShadowMap,
-          },
-        },
-        width,
-        height,
-      }, { shadow: true }),
-      new OrbitControlsModule(),
-    ];
-  }
+type ContextProps = {
+  bgColor: number[],
+};
 
-  modules: any[];
+export const Context = React.createContext<ContextProps>({
+  bgColor: backgroundColor,
+});
 
-  render() {
-    const { container, children, className } = this.props;
-    return (
-      <App
-        modules={this.modules}
-        parent={Parent(className)}
-        passAppToView={({ native }) => {
-          native.manager.set('container', container);
-          native.applyModule(new ResizeModule());
-        }}
+type Props = {
+  View: any,
+  containerEl: HTMLDivElement,
+  onFrame: any => any,
+  onRender: any => any,
+  children: React.Node,
+};
+
+export default withResizableContainer(({
+  bgColor = backgroundColor, View, containerEl, onRender, onFrame, children,
+}: Props & ContextProps) => (
+  <ReglContainer View={View || containerEl} contextProps={contextProps} onRender={onRender}>
+    <Context.Provider value={{ bgColor }}>
+      <Frame onFrame={context => {
+        context.regl.clear({ color: bgColor, depth: 1 });
+        if (onFrame) onFrame(context);
+      }}
       >
-        {children}
-      </App>
-    );
-  }
-}
+        <Camera center={center} distance={5} theta={theta}>{children}</Camera>
+      </Frame>
+    </Context.Provider>
+  </ReglContainer>
+));

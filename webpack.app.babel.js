@@ -17,6 +17,11 @@ let config = {
     filename: 'app.bundle.js',
     path: path.resolve(__dirname, 'src', '.build'),
   },
+  resolve: {
+    alias: {
+      react: path.resolve('./node_modules/react'),
+    },
+  },
   target: 'electron-renderer',
   module: {
     rules: [
@@ -39,6 +44,18 @@ let config = {
       {
         test: /\.(png|jpg|gif|svg|woff|woff2|ttf|otf|eot)$/,
         use: ['file-loader'],
+      },
+      {
+        test: /\.(frag|vert)$/,
+        use: [
+          'raw-loader',
+          {
+            loader: 'glslify-loader',
+            options: {
+              transform: ['glslify-import'],
+            },
+          },
+        ],
       },
     ],
   },

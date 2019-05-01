@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import { World } from '../World.component';
+import World from '../World.component';
 
 describe('component <World />', () => {
   it('should render with Box by default, without crashing', () => {

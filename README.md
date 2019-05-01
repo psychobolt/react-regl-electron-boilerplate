@@ -1,19 +1,18 @@
-# WhiteStormJS Electron Boilerplate
+# React Regl Electron Boilerplate
 
-[![Dependencies Status](https://david-dm.org/psychobolt/whitestorm-react-electron-boilerplate.svg)](https://david-dm.org/psychobolt/whitestorm-react-electron-boilerplate)
-[![Dev Dependencies Status](https://david-dm.org/psychobolt/whitestorm-react-electron-boilerplate/dev-status.svg)](https://david-dm.org/psychobolt/whitestorm-react-electron-boilerplate?type=dev)
-[![Peer Dependencies Status](https://david-dm.org/psychobolt/whitestorm-react-electron-boilerplate/peer-status.svg)](https://david-dm.org/psychobolt/whitestorm-react-electron-boilerplate?type=peer)
+[![Dependencies Status](https://david-dm.org/psychobolt/react-regl-electron-boilerplate.svg)](https://david-dm.org/psychobolt/react-regl-electron-boilerplate)
+[![Dev Dependencies Status](https://david-dm.org/psychobolt/react-regl-electron-boilerplate/dev-status.svg)](https://david-dm.org/psychobolt/react-regl-electron-boilerplate?type=dev)
+[![Peer Dependencies Status](https://david-dm.org/psychobolt/react-regl-electron-boilerplate/peer-status.svg)](https://david-dm.org/psychobolt/react-regl-electron-boilerplate?type=peer)
 
-[![Build Status](https://travis-ci.org/psychobolt/whitestorm-react-electron-boilerplate.svg?branch=master)](https://travis-ci.org/psychobolt/whitestorm-react-electron-boilerplate)
-[![codecov](https://codecov.io/gh/psychobolt/whitestorm-react-electron-boilerplate/branch/master/graph/badge.svg)](https://codecov.io/gh/psychobolt/whitestorm-react-electron-boilerplate)
+[![Build Status](https://travis-ci.org/psychobolt/react-regl-electron-boilerplate.svg?branch=master)](https://travis-ci.org/psychobolt/react-regl-electron-boilerplate)
+[![codecov](https://codecov.io/gh/psychobolt/react-regl-electron-boilerplate/branch/master/graph/badge.svg)](https://codecov.io/gh/psychobolt/react-regl-electron-boilerplate)
 
-The essential framework for WhiteStormJS React-Electron development.
+The essential framework for Regl and React-Electron development.
 
 ## Included
 
-- Example App based on WhiteStormJS's [TypeScript boilerplate](https://github.com/WhitestormJS/whitestorm-typescript-boilerplate)
- - ![Preview](https://user-images.githubusercontent.com/560721/31196681-7738d1d4-a903-11e7-9793-adab6eb1f4a1.gif)
-- [whs.js](https://github.com/WhitestormJS/whs.js) with [React integration](https://github.com/WhitestormJS/react-whs)
+- Example App based on [Whitestorm boilerplate](https://github.com/psychobolt/whitestorm-react-electron-boilerplate)
+- [regl](http://regl.party) with [React integration](https://github.com/psychobolt/react-regl)
 - [React](https://facebook.github.io/react/) with [recompose](https://github.com/acdlite/recompose) utility and [Redux support](https://github.com/reactjs/react-redux) libraries: 
   - [React Router Redux](https://github.com/ReactTraining/react-router/tree/master/packages/react-router-redux)
   - [Electron Redux](https://github.com/hardchor/electron-redux)

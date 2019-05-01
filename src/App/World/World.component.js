@@ -1,90 +1,92 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { type Location } from 'react-router-dom';
-import {
-  Box,
-  Sphere,
-  Plane,
-  PointLight,
-  AmbientLight,
-} from 'react-whs';
-import styled from 'styled-components';
-import * as THREE from 'three';
 
-import withResizableContainer from 'Framework/ReactResizableContainer';
 import Scene from './Scene';
-import * as styles from './World.style';
+import Lights, { createAmbientLight, createPointLight } from './Lights';
+import Shadows, { createDirectionalShadow } from './Shadows';
+import { createMaterial } from './Materials';
+import { combineShaders, createAmbientShader, createDiffuseShader, createSpecularShader } from './Shaders';
+import { Plane, Cube, Sphere } from './Models';
 
-type Props = {
-  containerEl: HTMLDivElement,
-  containerWidth: number,
-  containerHeight: number,
-  location: Location,
-};
+const bgColor = [0.086, 0.13, 0.16, 1.0];
 
-const FullScene = styled(Scene)`${styles.container}`;
+const ambientLight = createAmbientLight({
+  ambient: [0.8, 0.8, 0.8, 1.0],
+});
+const pointLight = createPointLight({
+  diffuse: [1.0, 1.0, 1.0, 1.0],
+  specular: [1.0, 1.0, 1.0, 1.0],
+  direction: [0.0, 1.0, 2.0, 1.0],
+});
 
-export const World = (
-  { containerEl, containerWidth = 680, containerHeight = 420, location }: Props,
-) => (
-  <FullScene
-    container={containerEl}
-    width={containerWidth}
-    height={containerHeight}
-  >
-    {location && location.pathname === '/sphere'
-      ? (
-        <Sphere
-          key="1"
-          geometry={{
-            radius: 5,
-            widthSegments: 32,
-            heightSegments: 32,
-          }}
-          material={new THREE.MeshPhongMaterial({ color: 0xF2F2F2 })}
-          position={{
-            y: 5,
-          }}
-        />
-      ) : (
-        <Box
-          key="2"
-          geometry={{
-            width: 10,
-            height: 10,
-            depth: 10,
-          }}
-          material={new THREE.MeshPhongMaterial({ color: 0xF2F2F2 })}
-          position={{
-            y: 5,
-          }}
-        />
-      )}
-    <Plane
-      key="3"
-      geometry={{
-        width: 100,
-        height: 100,
-      }}
-      material={new THREE.MeshPhongMaterial({ color: 0x447F8B })}
-      rotation={{
-        x: -Math.PI / 2,
-      }}
-    />
-    <PointLight
-      key="4"
-      intensity={0.5}
-      distance={100}
-      shadow={{
-        fow: 90,
-      }}
-      position={new THREE.Vector3(0, 10, 10)}
-    />
-    <AmbientLight
-      key="5"
-      intensity={0.4}
-    />
-  </FullScene>
+const ambientShader = createAmbientShader();
+const diffuseShader = createDiffuseShader({ shadow: true });
+const specularShader = createSpecularShader({ shadow: true });
+
+const shadows = [
+  createDirectionalShadow({
+    maxBias: 0.0008,
+    minBias: 0.0006,
+    light: pointLight,
+    samples: 25,
+  }),
+];
+
+const { shaders, lights } = combineShaders(
+  [ambientShader, diffuseShader, specularShader],
+  [
+    pointLight,
+    ambientLight,
+  ],
+  shadows,
 );
 
-export default withResizableContainer(World);
+const planeProps = {
+  material: createMaterial({
+    color: [0.26, 0.50, 0.55],
+  }),
+  shaders,
+  scale: 8.0,
+  position: [0.0, 0.0, 0.0],
+};
+
+const cubeProps = {
+  material: createMaterial({
+    color: [0.95, 0.95, 0.95],
+  }),
+  shaders,
+  shadows,
+  scale: 0.5,
+  position: [0.0, 0.25, 0.0],
+};
+
+const sphereProps = {
+  material: createMaterial({
+    color: [0.95, 0.95, 0.95],
+  }),
+  shaders,
+  shadows,
+  scale: 0.25,
+  position: [0.0, 0.25, 0.0],
+};
+
+type Props = {
+  renderingMode: string,
+  location: Location,
+  className: string,
+};
+
+export default ({ className, location, renderingMode }: Props) => (
+  <Scene bgColor={bgColor} className={className}>
+    <Shadows resSize={3000}>
+      <Lights lights={lights} renderingMode={renderingMode}>
+        {location && location.pathname === '/sphere'
+          ? <Sphere {...sphereProps} />
+          : <Cube {...cubeProps} />
+        }
+        <Plane {...planeProps} />
+      </Lights>
+    </Shadows>
+  </Scene>
+);
