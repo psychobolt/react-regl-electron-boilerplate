@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { Context as ReglContext, Drawable, Framebuffer } from '@psychobolt/react-regl';
 import { defaultMemoize } from 'reselect';
+import _ from 'lodash';
 
 import { Context as SceneContext } from '../Scene';
 
@@ -59,25 +60,29 @@ type Props = {
   children: React.Node,
 };
 
-export default ({ resSize = 1024, children }: Props) => {
+export default React.memo<Props>(({ resSize = 1024, children }: Props) => {
   const { context } = React.useContext(ReglContext);
   const { bgColor } = React.useContext(SceneContext);
-  const clear = () => context.regl.clear({
+  const clear = _.once(() => context.regl.clear({
     color: bgColor,
     depth: 1,
-  });
+  }));
   return (
     <Buffer resSize={resSize}>
       {buffers => (
-        <Drawable uniforms={{
-          'globalShadow.map': buffers.shadowMap,
-          'globalShadow.cube': buffers.shadowCube,
-          'globalShadow.shadowRes': resSize,
-        }}
+        <Drawable
+          name="shadow_buffers"
+          uniforms={{
+            'globalShadow.map': buffers.shadowMap,
+            'globalShadow.cube': buffers.shadowCube,
+            'globalShadow.shadowRes': resSize,
+          }}
         >
-          <Drawable framebuffer={buffers.shadowMap}><Drawable render={clear} /></Drawable>
+          <Drawable profile={false} framebuffer={buffers.shadowMap}>
+            <Drawable render={clear} />
+          </Drawable>
           <Context.Provider value={{ ...buffers, renderingMode: RenderingMode.DEPTH }}>
-            {React.Children.map(children, child => React.cloneElement(child))}
+            {React.Children.map(children, child => React.cloneElement(child, { name: 'light_set_depth' }))}
           </Context.Provider>
           <Context.Provider value={{ ...buffers, renderingMode: RenderingMode.NORMAL }}>
             {children}
@@ -86,4 +91,4 @@ export default ({ resSize = 1024, children }: Props) => {
       )}
     </Buffer>
   );
-};
+});

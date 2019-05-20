@@ -1178,19 +1178,19 @@
     universal-user-agent "^2.0.0"
     url-template "^2.0.8"
 
-"@psychobolt/react-regl-orbit-camera@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@psychobolt/react-regl-orbit-camera/-/react-regl-orbit-camera-0.0.2.tgz#2e66e034953994bc10d542f25949ac4b6222d847"
-  integrity sha512-A9FMBqGdRun9eu+sJ/71ZHVp0iPWVS+TdtATXwgXIscr0ltJ1CJ48iycRpxh1umH5++jJGc+NjF70F2QSV0dgQ==
+"@psychobolt/react-regl-orbit-camera@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@psychobolt/react-regl-orbit-camera/-/react-regl-orbit-camera-0.0.3.tgz#0f216eef1e34231716b94f1d5cb3350da747c095"
+  integrity sha512-9vRzwznZJpB8bqJ1p4hanrAMEdskEG4t7/SPPe2dQBXIa+Ow0b1IP1jpq+R7E0lmRM03fv8/doyHtCuHEFDHlQ==
   dependencies:
-    "@psychobolt/react-regl" "^0.0.2"
+    "@psychobolt/react-regl" "^0.0.3"
 
-"@psychobolt/react-regl@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@psychobolt/react-regl/-/react-regl-0.0.2.tgz#8fbc368e9f804b6e75385e6dfb6711113d92b7ca"
-  integrity sha512-TE5yCJclr4jYJa4HkqnTJde7iVZHPGi5KtmZtgvLhWDklTm+X+aEAA/vsLjs2kKA2mwvUU6UvxUXwdCte6Fq8w==
+"@psychobolt/react-regl@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@psychobolt/react-regl/-/react-regl-0.0.3.tgz#ee9cc1a48dadf37675acb3e051a00cff8946a01f"
+  integrity sha512-IEicQi2mBnuUg8d88IbGIqqbaR+1djwt/IGmNb93pQLJLNtw/tKNxBsDrB7vCuKUpGwm/dhEvLjUKnK2NYTqog==
   dependencies:
-    react-is "^16.8.5"
+    react-is "^16.8.6"
     resl "^1.0.3"
 
 "@types/babel__core@^7.1.0":
@@ -10548,7 +10548,7 @@ react-hot-loader@^4.8.4:
     shallowequal "^1.0.2"
     source-map "^0.7.3"
 
-react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4, react-is@^16.8.5, react-is@^16.8.6:
+react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4, react-is@^16.8.6:
   version "16.8.6"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.6.tgz#5bbc1e2d29141c9fbdfed456343fe2bc430a6a16"
   integrity sha512-aUk3bHfZ2bRSVFFbbeVS4i+lNPZr3/WM5jT2J5omUVV1zzcs1nAaf3l51ctA5FFvCRbhrH0bdAsRRQddFJZPtA==
@@ -11845,6 +11845,11 @@ specificity@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/specificity/-/specificity-0.4.1.tgz#aab5e645012db08ba182e151165738d00887b019"
   integrity sha512-1klA3Gi5PD1Wv9Q0wUoOQN1IWAuPu0D1U03ThXTr0cJ20+/iq2tHSDnK7Kk/0LXJ1ztUB2/1Os0wKmfyNgUQfg==
+
+spectorjs@^0.9.6:
+  version "0.9.6"
+  resolved "https://registry.yarnpkg.com/spectorjs/-/spectorjs-0.9.6.tgz#a33b2aeb8503b5267856bbb41c6ff1e7d87a3b3a"
+  integrity sha512-xPMylzINVKfnTBOXXobUsbKp64jRJZi4FDDlKLSm+B/qqWG3UkgEsfIy1ZXHsUCUvqyARCC7s14oA6GDZE85iA==
 
 spectron@^5.0.0:
   version "5.0.0"

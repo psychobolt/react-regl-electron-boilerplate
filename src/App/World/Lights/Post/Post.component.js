@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 
-import Passthorugh from '../Passthrough';
+import Passthrough from '../Passthrough';
 import { createLight } from '../Light';
 import { createConfig, createAmbientShader } from '../../Shaders';
 
@@ -33,5 +33,5 @@ export default ({ light, ...props }: Props) => {
       lights,
       uniforms,
     })), post);
-  return <Passthorugh {...options} {...rest} {...props} blend={blend} />;
+  return <Passthrough {...options} {...rest} {...props} blend={blend} />;
 };

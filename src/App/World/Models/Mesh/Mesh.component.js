@@ -3,6 +3,9 @@ import * as React from 'react';
 import { Drawable } from '@psychobolt/react-regl';
 import mat4 from 'gl-mat4';
 
+import vert from './Mesh.vert';
+import frag from './Mesh.frag';
+
 import Shaders from '../../Shaders';
 import { Context, Shadow, RenderingMode } from '../../Shadows';
 import { createMaterial } from '../../Materials';
@@ -18,37 +21,35 @@ const uniforms = {
   model,
 };
 
-const depth = { enable: true };
-
-type MeshProps = {
-  args: {}
-}
-
-const Mesh = ({ args = {}, ...props }: MeshProps) => (
-  <Drawable depth={depth} args={args} {...props} />
-);
-
 type Props = {
+  name: string,
   shaders: any[],
   shadows: any[],
   material: {
     uniforms: {},
   },
+  args: {},
 };
 
-export default ({ shaders, shadows = [], material = createMaterial(), ...props }: Props) => {
-  switch (shadows.length ? React.useContext(Context).renderingMode : null) {
+export default (
+  { shaders, shadows = [], material = createMaterial(), args = {}, ...props }: Props,
+) => {
+  const { name, ...rest } = props;
+  switch (React.useContext(Context).renderingMode) {
     case RenderingMode.DEPTH:
-      return shadows.map<any>((shadow, i) => <Shadow key={`shadow_${i + 1}`} shadow={shadow}><Mesh uniforms={uniforms} {...props} /></Shadow>);
+      return shadows.length > 0
+        ? shadows.map<any>((shadow, i) => <Shadow name={`${name}_shadow`} key={`shadow_${i + 1}`} shadow={shadow}><Drawable name={`${name}_depth`} uniforms={uniforms} args={args} {...rest} /></Shadow>)
+        : <Drawable name={`${name}_passthrough`} vert={vert} frag={frag} count={0} />;
     default:
       return (
-        <Shaders shaders={shaders}>
-          <Mesh
+        <Shaders name={`${name}_shaders`} shaders={shaders}>
+          <Drawable
             {...material}
             uniforms={{
-              model,
+              ...uniforms,
               ...material.uniforms,
             }}
+            args={args}
             {...props}
           />
         </Shaders>

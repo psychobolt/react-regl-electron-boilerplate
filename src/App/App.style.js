@@ -6,6 +6,7 @@ export const container = css`
 `;
 
 export const worldContainer = css`
+  position: relative;
   width: 100%;
   height: calc(100% - 71px);
 `;

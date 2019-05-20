@@ -7,6 +7,7 @@ import Passthrough from './Passthrough';
 import { RenderingMode, Context, createLight, type ContextProps } from './Light';
 
 import { Context as SceneContext } from '../Scene';
+import { Context as ShadowsContext, RenderingMode as ShadowsRenderingMode } from '../Shadows';
 import Background from '../Background';
 
 const { Context: ReglContext, Drawable, Framebuffer } = ReactRegl;
@@ -60,12 +61,14 @@ const Buffer = React.memo(({
 });
 
 type Props = {
+  name: string,
   lights: any[],
   buffer: BufferProps,
   children: React.Node,
 } & ContextProps;
 
 export default function ({
+  name = 'light_set',
   lights = [],
   renderingMode = RenderingMode.FORWARD,
   buffer,
@@ -74,31 +77,38 @@ export default function ({
 }: Props) {
   const { context } = React.useContext(ReglContext);
   const { bgColor } = React.useContext(SceneContext);
+  const shadows = React.useContext(ShadowsContext);
   let child;
   switch (renderingMode) {
     case RenderingMode.DEFFERED:
-      child = fbo => (
-        <>
-          <Drawable framebuffer={fbo}>
-            <Drawable render={() => context.regl.clear({
-              color: bgColor,
-              depth: 1,
-            })}
-            />
-            <Background color={bgColor} uniforms={{ normalTex: fbo.color[2] }} />
-            {children}
-          </Drawable>
-          <Background color={bgColor} uniforms={{ normalTex: fbo.color[2] }} />
-          {lights.length
-            ? lights.map((light, i) => <Post key={`post${i + 1}`} light={light} fbo={fbo} />)
-            : <Passthrough fbo={fbo} />
-          }
-        </>
-      );
+      if (shadows.renderingMode === ShadowsRenderingMode.DEPTH) {
+        child = () => children;
+      } else {
+        child = fbo => (
+          <>
+            <Drawable name={name} framebuffer={fbo}>
+              <Drawable render={() => context.regl.clear({
+                color: [0.0, 0.0, 0.0, 0.0],
+                depth: 1,
+              })}
+              />
+              {children}
+            </Drawable>
+            <Background name="background" color={bgColor} uniforms={{ normalTex: fbo.color[2] }} />
+            {lights.length
+              ? lights.map((light, i) => {
+                const lightName = `light_post_${i + 1}`;
+                return <Post name={lightName} key={lightName} light={light} fbo={fbo} />;
+              })
+              : <Passthrough fbo={fbo} />
+            }
+          </>
+        );
+      }
       break;
     default:
       child = fbo => (children
-        ? <Drawable {...createLights(lights)} {...props}>{children}</Drawable>
+        ? <Drawable name={name} {...createLights(lights)} {...props}>{children}</Drawable>
         : <Background color={bgColor} uniforms={{ normalTex: fbo.color[2] }} />);
   }
   return (

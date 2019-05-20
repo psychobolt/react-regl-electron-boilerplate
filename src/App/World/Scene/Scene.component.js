@@ -5,9 +5,18 @@ import Camera from '@psychobolt/react-regl-orbit-camera';
 
 import withResizableContainer from 'Framework/ReactResizableContainer';
 
-const contextProps = {
+let contextProps = {
   extensions: ['webgl_draw_buffers', 'oes_texture_float'],
 };
+
+const isDevelopment = process.env.NODE_ENV === 'development';
+if (isDevelopment) {
+  contextProps = {
+    ...contextProps,
+    extensions: [...contextProps.extensions, 'ext_disjoint_timer_query'],
+    profile: true,
+  };
+}
 
 const center = [0.0, 0.5, 0.0];
 
@@ -31,13 +40,26 @@ type Props = {
   children: React.Node,
 };
 
-export default withResizableContainer(({
+export default withResizableContainer(React.memo(({
   bgColor = backgroundColor, View, containerEl, onRender, onFrame, children,
 }: Props & ContextProps) => (
-  <ReglContainer View={View || containerEl} contextProps={contextProps} onRender={onRender}>
+  <ReglContainer
+    View={View || containerEl}
+    contextProps={contextProps}
+    onRender={() => {
+      /* istanbul ignore next */
+      if (isDevelopment) {
+        import('spectorjs').then(SPECTOR => {
+          window.spector = new SPECTOR.Spector();
+        });
+      }
+      if (onRender) onRender();
+    }}
+    statsWidget={isDevelopment}
+  >
     <Context.Provider value={{ bgColor }}>
       <Frame onFrame={context => {
-        context.regl.clear({ color: bgColor, depth: 1 });
+        context.regl.clear({ color: bgColor });
         if (onFrame) onFrame(context);
       }}
       >
@@ -45,4 +67,4 @@ export default withResizableContainer(({
       </Frame>
     </Context.Provider>
   </ReglContainer>
-));
+)));

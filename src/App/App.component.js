@@ -14,7 +14,7 @@ export default props => {
   return (
     <Container>
       <Header renderingMode={renderingMode} setRenderingMode={setRenderingMode} />
-      <View {...props} renderingMode={renderingMode} />
+      <View {...props} renderingMode={renderingMode} spector />
     </Container>
   );
 };

@@ -20,6 +20,7 @@ let config = {
   resolve: {
     alias: {
       react: path.resolve('./node_modules/react'),
+      'styled-components': path.resolve('./node_modules/styled-components'),
     },
   },
   target: 'electron-renderer',

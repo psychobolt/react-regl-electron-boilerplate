@@ -57,7 +57,7 @@ type Props = {
   children: React.Node,
 };
 
-export default ({ shadow, children }: Props) => {
+export default ({ shadow, children, ...props }: Props) => {
   const { shadowCube, shadowMap } = React.useContext(Context);
   const { bufferType, light, uniforms, vert, frag } = shadow;
   const framebuffer = bufferType === BufferTypes.CUBE ? shadowCube : shadowMap;
@@ -73,6 +73,7 @@ export default ({ shadow, children }: Props) => {
       }}
       framebuffer={framebuffer}
       cull={cull}
+      {...props}
     >
       {children}
     </Drawable>

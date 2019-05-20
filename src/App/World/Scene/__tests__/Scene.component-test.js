@@ -9,6 +9,8 @@ import Lights, { RenderingMode, createAmbientLight } from '../../Lights';
 import Shaders, { createAmbientShader } from '../../Shaders';
 import Shadows, { enableShadows, createDirectionalShadow } from '../../Shadows';
 
+jest.mock('../Scene.component');
+
 jest.mock('../../Shaders/Shader', () => {
   const { frag, ...rest } = jest.requireActual('../../Shaders/Shader');
   return {
@@ -75,23 +77,53 @@ describe('component <Scene />', () => {
         );
       });
 
-      it('should render without crashing -- deferred', done => {
+      it('should render without crashing -- deferred with shadows', done => {
         const onRender = () => done();
         const light = createAmbientLight();
-        const ambientShader = createAmbientShader();
-        const lights = [light];
+        const ambientShader = createAmbientShader({ shadow: true });
+        const shadow = createDirectionalShadow({ light });
+        const lights = enableShadows([shadow], [light]);
         const shaders = [ambientShader(lights)];
         mount(
           <Scene onRender={onRender}>
-            <Lights lights={lights} renderingMode={RenderingMode.DEFFERED}>
-              <Shaders shaders={shaders} count={0} />
-            </Lights>
+            <Shadows>
+              <Lights lights={lights} renderingMode={RenderingMode.DEFFERED}>
+                <Shaders shaders={shaders} count={0} />
+              </Lights>
+            </Shadows>
           </Scene>,
         );
       });
 
       describe('component <Mesh />', () => {
-        it('should render without crashing -- with shadows', done => {
+        it('should render without crashing -- without depth', done => {
+          const onFrame = () => done();
+          const light = createAmbientLight();
+          const ambientShader = createAmbientShader();
+          const lights = [light];
+          const positions = [[-1.0, 0.0, 0.0], [0.0, -1.0, 0.0], [1.0, 1.0, 0.0]];
+          const props = {
+            shaders: [ambientShader(lights)],
+            attributes: {
+              position: positions,
+            },
+            vert: `
+              precision mediump float;
+              attribute vec3 position;
+              uniform mat4 projection, model, view;
+              void main() {
+                gl_Position = projection * view * model * vec4(position, 1.0);
+              }`,
+            count: 3,
+          };
+          mount(
+            <Scene onFrame={onFrame}>
+              <Shadows><Lights lights={lights}><Mesh {...props} /></Lights></Shadows>
+            </Scene>,
+          );
+        });
+
+        it('should render without crashing -- with depth and shadows', done => {
           const onFrame = () => done();
           const light = createAmbientLight();
           const ambientShader = createAmbientShader({ shadow: true });

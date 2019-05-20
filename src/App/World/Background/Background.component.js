@@ -5,10 +5,6 @@ import { Drawable } from '@psychobolt/react-regl';
 import vert from './Background.vert';
 import frag from './Background.frag';
 
-const depth = {
-  enable: false,
-};
-
 type Props = {
   color: number[],
   position: number[],
@@ -36,7 +32,6 @@ export default ({
       ...attributes,
     }}
     count={position.length / 2}
-    depth={depth}
     {...props}
   />
 );
