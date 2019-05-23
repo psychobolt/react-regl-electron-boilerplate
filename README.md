@@ -41,7 +41,7 @@ The essential framework for Regl and React-Electron development.
 
 Follow [instructions](https://reliawire.com/brain-function-lateralisation/?fbclid=IwAR2Z9Gq2Jgf5mtkx9V1SuzZkH8smrRC8kv6uXxP97aiG-lEV8i-PXxCQVBU) to setup based on system.
 
-> Note for Windows, you may run ```npm install --global windows-build-tools --vs2015``` instead of manually installing Visual Studio SDK.
+> Note for Windows, you may run ```npm install --global windows-build-tools``` instead of manually installing Visual C++ Redistributable (requires 2015 or higher).
 
 ## Setup
 
