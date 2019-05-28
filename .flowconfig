@@ -5,3 +5,6 @@ module.name_mapper='^\(.*\)\.\(frag\|vert\)$' -> '<PROJECT_ROOT>/RAWFlowStub.js.
 
 [ignore]
 .*/@choojs/findup/.*
+
+[lints]
+deprecated-utility=warn

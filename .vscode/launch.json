@@ -67,6 +67,7 @@
         ]
       },
       "env": {
+        "BABEL_ENV": "test",
         "NODE_ENV": "development"
       },
       "console": "integratedTerminal",
