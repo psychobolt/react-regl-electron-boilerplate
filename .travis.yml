@@ -1,3 +1,5 @@
+dist: xenial
+
 language: node_js
 
 node_js:
@@ -11,15 +13,12 @@ addons:
     packages:
     - libxi-dev
     - mesa-utils
-    - xvfb
     - libgl1-mesa-dri
     - libglapi-mesa
     - libosmesa6
 
-before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 3 # give xvfb some time to start
+services:
+  - xvfb
 
 script:
   - yarn lint
