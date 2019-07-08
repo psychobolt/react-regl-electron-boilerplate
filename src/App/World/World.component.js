@@ -74,11 +74,10 @@ const sphereProps = {
 type Props = {
   renderingMode: string,
   location: Location,
-  className: string,
 };
 
-export default ({ className, location, renderingMode }: Props) => (
-  <Scene bgColor={bgColor} className={className}>
+export default ({ location, renderingMode }: Props) => (
+  <Scene bgColor={bgColor}>
     <Shadows resSize={3000}>
       <Lights lights={lights} renderingMode={renderingMode}>
         {location && location.pathname === '/sphere'
