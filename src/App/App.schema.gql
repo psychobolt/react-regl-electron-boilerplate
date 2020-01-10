@@ -1,0 +1,10 @@
+type StoreInfo {
+  name: String
+  description: String
+}
+
+type Query {
+  getStoreInfo: [StoreInfo]!
+}
+
+type Mutation

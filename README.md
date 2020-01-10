@@ -12,30 +12,39 @@ The essential framework for Regl and React-Electron development.
 ## Included
 
 - Example App based on [Whitestorm boilerplate](https://github.com/psychobolt/whitestorm-react-electron-boilerplate)
-- [regl](http://regl.party) with [React integration](https://github.com/psychobolt/react-regl)
-- [React](https://facebook.github.io/react/) with [recompose](https://github.com/acdlite/recompose) utility and [Redux support](https://github.com/reactjs/react-redux) libraries: 
+- Redux hydration from [SQLite3](https://github.com/mapbox/node-sqlite3) to [Apollo GraphQL](https://www.apollographql.com/)
+- ORM architecture with [Sequelize](https://sequelize.org/)
+- [React](https://facebook.github.io/react/) with [recompose](https://github.com/acdlite/recompose) utility and [Redux support](https://react-redux.js.org/) libraries: 
   - [React Router Redux](https://github.com/ReactTraining/react-router/tree/master/packages/react-router-redux)
   - [Electron Redux](https://github.com/hardchor/electron-redux)
   - [Redux Undo](https://github.com/omnidan/redux-undo)
+  - [Redux Saga](https://redux-saga.js.org/)
   - [Reselect](https://github.com/reactjs/reselect)
 - CSS-in-JS using [Styled Components](https://www.styled-components.com/)
 - [Webpack](https://webpack.js.org/) + [Babel-loader](https://webpack.js.org/loaders/babel-loader/) with presets:
   - [Env](https://babeljs.io/docs/plugins/preset-env/) with [stage-0](https://github.com/babel/babel/tree/master/packages/babel-preset-stage-0) features 
   - [Flow](https://flow.org/) Type support
   - [Sass](http://sass-lang.com/) support
-  - [Hot Module Reloading](https://webpack.js.org/guides/hot-module-replacement/) enabled with [React Hot Loader](https://github.com/gaearon/react-hot-loader)
+  - [Hot Module Reloading](httpws://webpack.js.org/guides/hot-module-replacement/) enabled with [React Refresh](https://github.com/pmmmwh/react-refresh-webpack-plugin)
 - Babel plugins: 
   - [Module Resolver](https://github.com/tleunen/babel-plugin-module-resolver)
   - Regenerator Runtime support with [Tranform Runtime](https://babeljs.io/docs/plugins/transform-runtime/)
 - Simple app persistence using [electron-store](https://github.com/sindresorhus/electron-store#readme)
+- Logfile support using [electron-log](https://github.com/megahertz/electron-log)
 - Packaging support: [electron-builder](https://github.com/electron-userland/electron-builder)
 - Test runner: [Jest](https://facebook.github.io/jest)
 - e2e runner: [Spectron](https://electron.atom.io/spectron/) + [EVA](https://github.com/avajs/ava)
-- [Enzyme](https://github.com/airbnb/enzyme)
+- Mocking and testing utilities
+    - [Enzyme](https://github.com/airbnb/enzyme)
+    - [Redux Mock Store](https://github.com/dmitry-zaets/redux-mock-store)
+    - [Redux Saga Test Plan](http://redux-saga-test-plan.jeremyfairbank.com/)
+    - [Sequelize Mock](https://sequelize-mock.readthedocs.io/)
+    - [Mock Apollo Client](https://github.com/Mike-Gibson/mock-apollo-client)
 - Code Coverage reporter: [Codecov](https://codecov.io/)
 - ES Linting: [ESLint](http://eslint.org/) using [AirBnb style guide](https://github.com/airbnb/javascript)
-- [stylelint](https://stylelint.io)
-- [DevTools Add-Ons](https://github.com/MarshallOfSound/electron-devtools-installer), including:
+- Style Linting: [stylelint](https://stylelint.io)
+- Install extensions using [electron-devtools-installer](https://github.com/MarshallOfSound/electron-devtools-installer), including:
+  - [React Developer Tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi)
   - [Redux DevTools Extension](http://extension.remotedev.io/)
 
 ## Requirements
@@ -54,19 +63,12 @@ Follow [instructions](https://reliawire.com/brain-function-lateralisation/?fbcli
 
 During development, run watch task:
 ```sh
-yarn watch # compile new code changes and reloads the app
+yarn start # compile new code changes and reloads the app
 ```
 
-> Alternatively, you can run watch task (npm: watch) in Visual Studio Code.
+> Alternatively, you can launch "Debug App" in Visual Studio Code in debugger.
 
-Then, in another terminal, launch Electron:
-```sh
-yarn dev # same as 'yarn start'
-```
-
-> Alternatively, you can launch in Visual Studio Code in debug mode.
-
-Tesing only with production code (watch and debug unnecessary):
+Testing only with production code (watch and debug unnecessary):
 
 ```sh
 yarn prod
@@ -75,8 +77,22 @@ yarn prod
 ## Adding dependencies (libraries)
 
 ```sh
-yarn add [package-name] --dev # for dev tools
-yarn add [package-name] # for app
+yarn add [package-name] --dev
+yarn add [package-name]
+```
+
+>  For any packages you wish to include in the app build, install as a non-development dependency in ```src/package.json``` and specify it as ```externals``` in webpack config. Any native code included in ```src/package.json``` will be compiled for platform target during npm's postinstall.
+
+## Adding DevTools
+
+Modify the file [devtools.json](devtools.json). For example:
+```json
+{
+    "Redux DevTools": {
+        "id": "lmhkpmbekcpmknklioeibfkpmmfibljd",
+        "version": "2.17.0"
+    }
+}
 ```
 
 ## Merging from base project
@@ -86,7 +102,7 @@ This project is a fork from psychobolt's [react-electron-boilerplate](https://gi
 ## Static Type Checker
 
 ```sh
-yarn run flow
+yarn flow
 ```
 
 > Some extensions such as in [Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=flowtype.flow-for-vscode) detect ```.flowconfig``` and run type checking in the editor.

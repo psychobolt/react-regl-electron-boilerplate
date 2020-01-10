@@ -6,15 +6,29 @@ import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import OptimizeCssAssetsPlugin from 'optimize-css-assets-webpack-plugin';
+import ReactRefreshPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 
 import CommonConfig from './webpack.common';
 
 const devMode = process.env.NODE_ENV !== 'production';
 
+function recursiveIssuer(m) {
+  if (m.issuer) {
+    return recursiveIssuer(m.issuer);
+  }
+  if (m.name) {
+    return m.name;
+  }
+  return false;
+}
+
 let config = {
-  entry: ['react-hot-loader/patch', 'css-hot-loader/hotModuleReplacement', './src/index.js'],
+  entry: {
+    splash: ['css-hot-loader/hotModuleReplacement', './src/splash.js'],
+    app: ['css-hot-loader/hotModuleReplacement', './src/index.js'],
+  },
   output: {
-    filename: 'app.bundle.js',
+    filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'src', '.build'),
   },
   resolve: {
@@ -63,21 +77,27 @@ let config = {
   optimization: {
     splitChunks: {
       cacheGroups: {
-        xelStyles: {
-          name: 'xel.theme',
-          test: /[\\/]node_modules[\\/]xel[\\/].+\.css$/,
+        venderJS: {
+          name: 'vendor',
+          test: /[\\/]node_modules[\\/].+\.js$/,
           chunks: 'all',
           enforce: true,
         },
         venderStyles: {
-          name: 'vender',
-          test: /[\\/]node_modules[\\/](?!(xel[\\/])).+\.css/,
+          name: 'vender.style',
+          test: /[\\/]node_modules[\\/].+\.css$/,
           chunks: 'all',
           enforce: true,
         },
-        styles: {
-          name: 'styles',
-          test: /src[\\/].+\.css$/,
+        splashStyles: {
+          name: 'splash',
+          test: (m, c, entry = 'splash') => m.constructor.name === 'CssModule' && recursiveIssuer(m) === entry,
+          chunks: 'all',
+          enforce: true,
+        },
+        appStyles: {
+          name: 'app',
+          test: (m, c, entry = 'app') => m.constructor.name === 'CssModule' && recursiveIssuer(m) === entry,
           chunks: 'all',
           enforce: true,
         },
@@ -88,12 +108,34 @@ let config = {
     new MiniCssExtractPlugin({
       filename: '[name].css',
     }),
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: [
+        '*.html',
+        'app.bundle.js',
+        '*.app.bundle.js',
+        'splash.bundle.js',
+        '*.splash.bundle.js',
+        'vender.bundle.js',
+        'vender.style.bundle.js',
+        '*.css',
+        '*.woff',
+        '*.woff2',
+      ],
+    }),
   ],
 };
 
-let htmlConfig = {
-  filename: 'index.html',
-  template: 'src/index.html',
+const htmlConfigs = {
+  splash: {
+    filename: 'splash.html',
+    template: 'src/splash.html',
+    chunks: ['vender', 'vender.style', 'splash'],
+  },
+  app: {
+    filename: 'index.html',
+    template: 'src/index.html',
+    chunks: ['vender', 'vender.style', 'app'],
+  },
 };
 
 if (devMode) {
@@ -108,12 +150,14 @@ if (devMode) {
     plugins: [
       new webpack.NamedModulesPlugin(),
       new webpack.HotModuleReplacementPlugin(),
-      new HtmlWebpackPlugin(htmlConfig),
+      new HtmlWebpackPlugin(htmlConfigs.splash),
+      new HtmlWebpackPlugin(htmlConfigs.app),
       new BundleAnalyzerPlugin(),
+      new ReactRefreshPlugin({ disableRefreshCheck: true }),
     ],
   });
 } else {
-  htmlConfig = Object.assign({}, htmlConfig, {
+  const htmlConfig = {
     minify: {
       collapseBooleanAttributes: true,
       decodeEntities: true,
@@ -130,23 +174,14 @@ if (devMode) {
       trimCustomFragments: true,
       useShortDoctype: true,
     },
-  });
+  };
   config = merge(config, {
     plugins: [
-      new CleanWebpackPlugin({
-        cleanOnceBeforeBuildPatterns: [
-          '*.html',
-          'app.bundle.js',
-          '*.app.bundle.js',
-          '*.css',
-          '*.woff',
-          '*.woff2',
-        ],
-      }),
       new OptimizeCssAssetsPlugin({
         cssProcessorOptions: { discardComments: { removeAll: true } },
       }),
-      new HtmlWebpackPlugin(htmlConfig),
+      new HtmlWebpackPlugin({ ...htmlConfigs.splash, ...htmlConfig }),
+      new HtmlWebpackPlugin({ ...htmlConfigs.app, ...htmlConfig }),
     ],
   });
 }

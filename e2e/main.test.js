@@ -1,11 +1,7 @@
 import test from 'ava';
+import electronPath from 'electron';
 import { Application } from 'spectron';
 import path from 'path';
-
-let electronPath = path.join(__dirname, '..', 'node_modules', '.bin', 'electron');
-if (process.platform === 'win32') {
-  electronPath += '.cmd';
-}
 
 const appPath = path.join(__dirname, '..');
 
@@ -13,6 +9,9 @@ test.beforeEach(async t => {
   t.context.app = new Application({ // eslint-disable-line no-param-reassign
     path: electronPath,
     args: [appPath],
+    env: {
+      SKIP_SPLASH: true,
+    },
   });
 
   await t.context.app.start();

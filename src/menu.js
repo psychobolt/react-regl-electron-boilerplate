@@ -1,54 +1,62 @@
-import { app, Menu } from 'electron';
+import { app, Menu, MenuItem } from 'electron';
+
+function getDefaultSubmenu(role) {
+  return new MenuItem({ role }).submenu.items.map(menuItem => ({ ...menuItem }));
+}
 
 export default win => {
-  const viewMenu = () => ({
+  const template = [];
+
+  if (process.platform === 'darwin') {
+    const appMenu = {
+      label: app.name,
+      submenu: getDefaultSubmenu('appMenu'),
+    };
+    template.push(appMenu);
+  }
+
+  const editMenu = {
+    label: 'Edit',
+    submenu: getDefaultSubmenu('editMenu'),
+  };
+  template.push(editMenu);
+
+  const viewMenu = {
     label: 'View',
     submenu: [
       { role: 'togglefullscreen' },
       ...(process.env.NODE_ENV === 'development' ? [
-        { role: 'reload' },
+        {
+          role: 'reload',
+          accelerator: 'CommandOrControl+Shift+R',
+        },
         { role: 'toggledevtools' },
       ] : []),
     ],
-  });
+  };
+  template.push(viewMenu);
 
-  const goMenu = () => ({
-    label: 'Go',
-    submenu: [
-      {
-        label: 'Back',
-        accelerator: 'Alt+Left',
-        click: () => win.webContents.goBack(),
-      },
-      {
-        label: 'Forward',
-        accelerator: 'Alt+Right',
-        click: () => win.webContents.goForward(),
-      },
-    ],
-  });
-
-  const template = [
-    { role: 'editMenu' },
-    viewMenu(),
-    ...(process.env.NODE_ENV === 'development' ? [goMenu()] : []),
-    { role: 'windowMenu' },
-  ];
-
-  if (process.platform === 'darwin') {
-    template.unshift({
-      label: app.getName(),
+  if (process.env.NODE_ENV === 'development') {
+    const goMenu = {
+      label: 'Go',
       submenu: [
-        { role: 'about' },
-        { type: 'separator' },
-        { role: 'hide' },
-        { role: 'hideothers' },
-        { role: 'unhide' },
-        { type: 'separator' },
-        { role: 'quit' },
+        {
+          label: 'Back',
+          accelerator: 'Alt+Left',
+          click: () => win.webContents.goBack(),
+        },
+        {
+          label: 'Forward',
+          accelerator: 'Alt+Right',
+          click: () => win.webContents.goForward(),
+        },
       ],
-    });
+    };
+    template.push(goMenu);
   }
+
+  const windowMenu = { role: 'windowMenu' };
+  template.push(windowMenu);
 
   const menu = Menu.buildFromTemplate(template);
 
