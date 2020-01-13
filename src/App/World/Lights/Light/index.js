@@ -35,20 +35,26 @@ export const RenderingMode = {
 
 export const uniform = (name: string, i: number) => `lights[${i}].${name}`;
 
-type Light = {
+export type Config = {
   shadow: {},
   shaders: any[]
 }
 
-export const createLight = ({ shaders, shadow, ...values }: Light, index: number) => Object
-  .entries(values).reduce((config, [key, value]) => ({
+export type Light = {
+  uniforms?: {
+    [string]: any,
+  }
+}
+
+export const createLight = ({ shaders, shadow, ...values }: Config, index: number) => Object
+  .entries(values).reduce<Light>(({ uniforms = {}, ...config }, [key, value]) => ({
     ...config,
     uniforms: {
-      eye: context => context.eye,
-      ...config.uniforms,
+      ...uniforms,
+      eye: uniforms.eye || (context => context.eye),
       [uniform(key, index)]: value,
     },
-  }), Object.entries(createShadow(shadow).uniforms).reduce((config, [key, value]) => ({
+  }), Object.entries(createShadow(shadow).uniforms).reduce<Light>((config, [key, value]) => ({
     ...config,
     uniforms: {
       ...config.uniforms,

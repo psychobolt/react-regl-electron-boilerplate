@@ -56,7 +56,7 @@ const deferred = (): any => ({
 
 type Shaders = Array<any>;
 
-export function createConfig(shaders: Shaders, main): any {
+export function createConfig(shaders: Shaders, main: string): any {
   let maxLightCount = 0;
   let shadow = false;
   const { fragments, applyShaders, ...rest } = shaders

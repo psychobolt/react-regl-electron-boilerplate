@@ -82,8 +82,7 @@ export default ({ location, renderingMode }: Props) => (
       <Lights lights={lights} renderingMode={renderingMode}>
         {location && location.pathname === '/sphere'
           ? <Sphere name="sphere" {...sphereProps} />
-          : <Cube name="cube" {...cubeProps} />
-        }
+          : <Cube name="cube" {...cubeProps} />}
         <Plane name="plane" {...planeProps} />
       </Lights>
     </Shadows>

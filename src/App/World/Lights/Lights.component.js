@@ -39,21 +39,23 @@ type BufferProps = {
   color: Array<Texture>,
   depth: boolean,
   children: any => React.Node,
+  fitView: boolean,
 };
 
 const Buffer = React.memo(({
+  color = [],
   depth = true,
   children,
+  fitView = true,
   ...props
 }: BufferProps) => {
   const { context } = React.useContext(ReglContext);
-  const { color = [], ...rest } = props;
   return (
     <Framebuffer
+      {...props}
       color={[...textures, ...color].map(texture => context.regl.texture(texture))}
       depth={depth}
-      fitView
-      {...rest}
+      fitView={fitView}
     >
       {fbo => children(fbo)}
     </Framebuffer>
@@ -100,8 +102,7 @@ export default function ({
                 const lightName = `light_post_${i + 1}`;
                 return <Post name={lightName} key={lightName} light={light} fbo={fbo} />;
               })
-              : <Passthrough fbo={fbo} />
-            }
+              : <Passthrough fbo={fbo} />}
           </>
         );
       }

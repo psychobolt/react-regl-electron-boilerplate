@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 import Passthrough from '../Passthrough';
-import { createLight } from '../Light';
+import { createLight, type Config } from '../Light';
 import { createConfig, createAmbientShader } from '../../Shaders';
 
 import post from './Post.frag';
@@ -18,9 +18,7 @@ const blend = {
 const ambientShader = createAmbientShader();
 
 type Props = {
-  light: {
-    shaders: {},
-  },
+  light: Config
 };
 
 export default ({ light, ...props }: Props) => {
