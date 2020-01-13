@@ -24,8 +24,8 @@ function recursiveIssuer(m) {
 
 let config = {
   entry: {
-    splash: ['css-hot-loader/hotModuleReplacement', './src/splash.js'],
-    app: ['css-hot-loader/hotModuleReplacement', './src/index.js'],
+    splash: ['./src/splash.js'],
+    app: ['./src/index.js'],
   },
   output: {
     filename: '[name].bundle.js',
@@ -51,7 +51,7 @@ let config = {
       {
         test: /\.s?css$/,
         use: [
-          devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+          MiniCssExtractPlugin.loader,
           'css-loader',
           'sass-loader',
         ],
@@ -107,6 +107,9 @@ let config = {
   plugins: [
     new MiniCssExtractPlugin({
       filename: '[name].css',
+      options: {
+        hmr: devMode,
+      },
     }),
     new CleanWebpackPlugin({
       cleanOnceBeforeBuildPatterns: [
