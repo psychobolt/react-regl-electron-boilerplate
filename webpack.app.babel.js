@@ -51,7 +51,12 @@ let config = {
       {
         test: /\.s?css$/,
         use: [
-          MiniCssExtractPlugin.loader,
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              hmr: devMode,
+            },
+          },
           'css-loader',
           'sass-loader',
         ],
@@ -107,9 +112,6 @@ let config = {
   plugins: [
     new MiniCssExtractPlugin({
       filename: '[name].css',
-      options: {
-        hmr: devMode,
-      },
     }),
     new CleanWebpackPlugin({
       cleanOnceBeforeBuildPatterns: [
