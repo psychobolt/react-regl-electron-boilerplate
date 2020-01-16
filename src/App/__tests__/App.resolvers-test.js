@@ -16,6 +16,6 @@ test('App resolvers should get store info', () => {
     },
   };
   Query.getStoreInfo(undefined, {}, config).then(infos => {
-    expect(infos.findIndex(({ name }) => name === 'TodoList')).toBeGreaterThan(-1);
+    expect(infos).toEqual([]);
   });
 });

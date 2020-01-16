@@ -12,6 +12,7 @@ let contextProps = {
 };
 
 const isDevelopment = process.env.NODE_ENV === 'development';
+/* istanbul ignore if */
 if (isDevelopment) {
   contextProps = {
     ...contextProps,
