@@ -12,9 +12,9 @@ The essential framework for Regl and React-Electron development.
 ## Included
 
 - Example App based on [Whitestorm boilerplate](https://github.com/psychobolt/whitestorm-react-electron-boilerplate)
-- Redux hydration from [SQLite3](https://github.com/mapbox/node-sqlite3) to [Apollo GraphQL](https://www.apollographql.com/)
-- ORM architecture with [Sequelize](https://sequelize.org/)
-- [React](https://facebook.github.io/react/) with [recompose](https://github.com/acdlite/recompose) utility and [Redux support](https://react-redux.js.org/) libraries: 
+    - Redux hydration from [SQLite3](https://github.com/mapbox/node-sqlite3) to [Apollo GraphQL](https://www.apollographql.com/)
+    - ORM architecture with [Sequelize](https://sequelize.org/)
+- [React](https://facebook.github.io/react/) and [Redux support](https://react-redux.js.org/) libraries: 
   - [React Router Redux](https://github.com/ReactTraining/react-router/tree/master/packages/react-router-redux)
   - [Electron Redux](https://github.com/hardchor/electron-redux)
   - [Redux Undo](https://github.com/omnidan/redux-undo)
