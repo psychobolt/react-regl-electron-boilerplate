@@ -3,8 +3,43 @@ type StoreInfo {
   description: String
 }
 
-type Query {
-  getStoreInfo: [StoreInfo]!
+type Layout {
+  i: String!
+  w: Float
+  h: Float
+  x: Float
+  y: Float
+  isDraggable: Boolean
 }
 
-# type Mutation
+input SaveLayoutInput {
+  i: String
+  w: Float
+  h: Float
+  x: Float
+  y: Float
+  isDraggable: Boolean
+}
+
+type Query {
+  getStoreInfo: [StoreInfo]!
+  getLayout: [Layout]
+}
+
+type SaveLayoutResponse {
+  code: Int!
+  success: Boolean!
+  message: String!
+  layout: [Layout]
+}
+
+type DeleteLayoutResponse {
+  code: Int!
+  success: Boolean!
+  message: String!
+}
+
+type Mutation {
+  saveLayout(layout: [SaveLayoutInput]!): SaveLayoutResponse
+  deleteLayout(ids: [String]!): DeleteLayoutResponse
+}

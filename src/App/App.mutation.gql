@@ -1,0 +1,23 @@
+mutation SaveLayout($layout: [SaveLayoutInput]!) {
+  saveLayout(layout: $layout) {
+    code
+    success
+    message
+    layout {
+      i
+      w
+      h
+      x
+      y
+      isDraggable
+    }
+  }
+}
+
+mutation DeleteLayout($ids: [String]!) {
+  deleteLayout(ids: $ids) {
+    code
+    success
+    message
+  }
+}

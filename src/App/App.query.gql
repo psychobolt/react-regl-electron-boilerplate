@@ -1,0 +1,10 @@
+query GetLayout {
+  layout: getLayout {
+    i
+    w
+    h
+    x
+    y
+    isDraggable
+  }
+}

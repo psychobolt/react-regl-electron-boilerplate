@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { type Location } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import Scene from './Scene';
 import Lights, { createAmbientLight, createPointLight } from './Lights';
@@ -73,18 +73,20 @@ const sphereProps = {
 
 type Props = {
   renderingMode: string,
-  location: Location,
 };
 
-export default ({ location, renderingMode }: Props) => (
-  <Scene bgColor={bgColor}>
-    <Shadows resSize={3000}>
-      <Lights lights={lights} renderingMode={renderingMode}>
-        {location && location.pathname === '/sphere'
-          ? <Sphere name="sphere" {...sphereProps} />
-          : <Cube name="cube" {...cubeProps} />}
-        <Plane name="plane" {...planeProps} />
-      </Lights>
-    </Shadows>
-  </Scene>
-);
+export default ({ renderingMode }: Props) => {
+  const location = useLocation();
+  return (
+    <Scene bgColor={bgColor}>
+      <Shadows resSize={3000}>
+        <Lights lights={lights} renderingMode={renderingMode}>
+          {location && location.pathname === '/sphere'
+            ? <Sphere name="sphere" {...sphereProps} />
+            : <Cube name="cube" {...cubeProps} />}
+          <Plane name="plane" {...planeProps} />
+        </Lights>
+      </Shadows>
+    </Scene>
+  );
+};
