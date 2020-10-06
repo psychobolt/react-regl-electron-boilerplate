@@ -23,7 +23,7 @@ test.afterEach.always(async t => {
 
 test('Launch', async t => {
   const { app } = t.context;
-  await app.client.waitUntilWindowLoaded(10000);
+  await app.client.waitUntilWindowLoaded(60000);
 
   const win = app.browserWindow;
   t.false(await win.isMinimized());
