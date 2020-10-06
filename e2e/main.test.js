@@ -14,8 +14,6 @@ test.beforeEach(async t => {
     },
   });
 
-  t.context.app.commandLine.appendSwitch('ignore-gpu-blacklist');
-
   await t.context.app.start();
 });
 
