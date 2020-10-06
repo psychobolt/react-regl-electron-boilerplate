@@ -14,6 +14,8 @@ test.beforeEach(async t => {
     },
   });
 
+  t.context.app.commandLine.appendSwitch('ignore-gpu-blacklist');
+
   await t.context.app.start();
 });
 
@@ -23,7 +25,7 @@ test.afterEach.always(async t => {
 
 test('Launch', async t => {
   const { app } = t.context;
-  await app.client.waitUntilWindowLoaded(60000);
+  await app.client.waitUntilWindowLoaded();
 
   const win = app.browserWindow;
   t.false(await win.isMinimized());
