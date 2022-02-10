@@ -156,7 +156,7 @@
     "mock-apollo-client": "^0.3.0",
     "node-hot-loader": "^1.17.8",
     "node-pre-gyp": "^0.14.0",
-    "node-sass": "^4.13.1",
+    "node-sass": "^7.0.0",
     "nodemon": "^2.0.2",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "raw-loader": "^4.0.0",
